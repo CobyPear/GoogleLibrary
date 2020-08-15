@@ -3,7 +3,6 @@ import API from '../utils/API';
 import Jumbotron from '../components/Jumbotron/index';
 import Book from '../components/Book/index';
 import Card from '../components/Card/index';
-import Form from '../components/Form/index';
 import { List } from '../components/List/index';
 import Footer from '../components/Footer/index';
 import { Row, Container, Col } from '../components/Grid/index';
@@ -17,14 +16,13 @@ export default function Saved() {
   })
 
   useEffect(() => {
-    getSavedBooks();
-  }, [state])
+      getSavedBooks();
+  }, [state.library])
 
   const getSavedBooks = () => {
     API.getSavedBooks()
       .then(res => {
-        setState(state => ({
-          ...state,
+        setState(({
           library: res.data
         }));
       })
@@ -37,11 +35,16 @@ export default function Saved() {
   };
 
   const deleteBook = id => {
+    console.log("delete book clicked")
     API.deleteBook(id)
-    .then(getSavedBooks())
+      .then(res => getSavedBooks())
+      .catch(err => {
+        setState(state => ({
+          ...state,
+          error: err
+        }));
+      })
   }
-
-
 
   return (
     <div>
@@ -57,25 +60,30 @@ export default function Saved() {
           <Col size={'12'}>
             <Card title="Saved Books">
               <List>
-              {
-              state.library.map((x) => (
-                <Book key={x.googleId}
-                  value={x}
-                  Button={() => (
-                    <button
-                      onClick={() => deleteBook(x._id)}
-                      className="btn btn-danger ml-2"
-                    >
-                      Delete
-                    </button>
-                  )}
-
-                />
-              ))}
+                {
+                  state.library.length ? (
+                    state.library.map((x) => (
+                      <Book key={x._id}
+                        value={x}
+                        Button={() => (
+                          <button
+                            onClick={() => deleteBook(x._id)}
+                            className="btn btn-danger ml-2"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      />
+                    ))
+                  ) : (
+                      <h2 className='text-center'>No Books Saved</h2>
+                    )
+                }
               </List>
             </Card>
           </Col>
         </Row>
+        <Footer />
       </Container>
     </div>
   )

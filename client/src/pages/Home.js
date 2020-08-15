@@ -15,9 +15,6 @@ export default function Home() {
     error: ''
   });
 
-  // useEffect(() => {
-
-  // }, [])
 
   const getBooks = () => {
     API.getBooks(state.search)
@@ -32,8 +29,6 @@ export default function Home() {
           googleId: x.id
         }));
 
-        console.log("res.data", res.data)
-        console.log("mapped ", mapped)
         setState(state => ({
           ...state,
           results: mapped,
@@ -70,13 +65,12 @@ export default function Home() {
 
   return (
     <div>
-      {console.log(state)}
-      <Container fluid={'fluid'}>
+      <Container >
         <Jumbotron>
           <h1>Welcome To Your Library</h1>
         </Jumbotron>
         <Row>
-          <Col size={"12"}>
+          <Col size={'md-12'}>
             <Card title="Search">
               <Form
                 handleInputChange={handleInputChange}
@@ -88,20 +82,24 @@ export default function Home() {
         <Card title="Results">
           <List>
             {
-              state.results.map((x) => (
-                <Book key={x.googleId}
-                  value={x}
-                  Button={() => (
-                    <button
-                      onClick={() => saveBook(x.googleId)}
-                      className="btn btn-primary ml-2"
-                    >
-                      Save
-                    </button>
-                  )}
-
-                />
-              ))}
+              state.results.length ? (
+                state.results.map((x) => (
+                  <Book key={x.googleId}
+                    value={x}
+                    Button={() => (
+                      <button
+                        onClick={() => saveBook(x.googleId)}
+                        className="btn btn-primary ml-2"
+                      >
+                        Save
+                      </button>
+                    )}
+                  />
+                ))
+              ) : (
+                  <h2 className='text-center'>Search For a Book</h2>
+                )
+            }
           </List>
         </Card>
         <Footer />
