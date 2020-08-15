@@ -9,6 +9,6 @@ export const List = ({ children }) => (
   </ul>
 );
 
-export function ListItem({ children }) {
-  return <li className="list-group-item">{children}</li>;
+export function ListItem(props) {
+  return <li className="list-group-item">{props.value}</li>;
 }
