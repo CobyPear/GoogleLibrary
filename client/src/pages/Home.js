@@ -84,7 +84,8 @@ export default function Home() {
             {
               state.results.length ? (
                 state.results.map((x) => (
-                  <Book key={x.googleId}
+                  <Book
+                    key={x.googleId}
                     value={x}
                     Button={() => (
                       <button

@@ -16,13 +16,14 @@ export default function Saved() {
   })
 
   useEffect(() => {
-      getSavedBooks();
-  }, [state.library])
+    getSavedBooks();
+  }, [])
 
   const getSavedBooks = () => {
     API.getSavedBooks()
       .then(res => {
-        setState(({
+        setState(state => ({
+          ...state,
           library: res.data
         }));
       })
@@ -35,7 +36,6 @@ export default function Saved() {
   };
 
   const deleteBook = id => {
-    console.log("delete book clicked")
     API.deleteBook(id)
       .then(res => getSavedBooks())
       .catch(err => {
@@ -57,26 +57,27 @@ export default function Saved() {
           </Col>
         </Row>
         <Row>
-          <Col size={'12'}>
+          <Col size={'md-12'}>
             <Card title="Saved Books">
               <List>
                 {
-                  state.library.length ? (
-                    state.library.map((x) => (
-                      <Book key={x._id}
-                        value={x}
-                        Button={() => (
-                          <button
-                            onClick={() => deleteBook(x._id)}
-                            className="btn btn-danger ml-2"
-                          >
-                            Delete
-                          </button>
-                        )}
-                      />
-                    ))
+                  !state.library.length ? (
+                    <h2 className='text-center'>No Books Saved</h2>
                   ) : (
-                      <h2 className='text-center'>No Books Saved</h2>
+                      state.library.map((x) => (
+                        <Book
+                          key={x._id}
+                          value={x}
+                          Button={() => (
+                            <button
+                              onClick={() => deleteBook(x._id)}
+                              className="btn btn-danger ml-2"
+                            >
+                              Delete
+                            </button>
+                          )}
+                        />
+                      ))
                     )
                 }
               </List>
