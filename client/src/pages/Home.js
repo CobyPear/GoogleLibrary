@@ -63,7 +63,6 @@ export default function Home() {
 
   const saveBook = id => {
     const newSave = state.results.find(x => x.googleId === id)
-    console.log("new save", newSave)
     API.saveBook(newSave)
       .then(getBooks())
   };
